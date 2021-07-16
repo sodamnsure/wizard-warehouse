@@ -9,7 +9,7 @@ import org.elasticsearch.spark.sql.sparkDatasetFunctions
 object SparkWriteES {
   def main(args: Array[String]): Unit = {
     val spark: SparkSession = SparkSession.builder().appName("SparkWriteES").master("local[4]").getOrCreate()
-
+    // es.net.ssl参数设置为true，允许https连接
     val options = Map(
       "es.index.auto.create" -> "true",
       "es.nodes.wan.only" -> "true",
