@@ -16,13 +16,17 @@ object SparkWriteES {
       "es.nodes" -> "elastic-9194b4.es.us-east-1.aws.found.io",
       "es.port" -> "9243",
       "es.net.http.auth.user" -> "elastic",
-      "es.net.http.auth.pass" -> "************",
-      "es.net.ssl" -> "true"
+      "es.net.http.auth.pass" -> "********************",
+      "es.net.ssl" -> "true",
+      "es.mapping.id" -> "f_user_id"
     )
 
-    val df =  spark.read.csv("/Users/sodamnsure/Desktop/credentials-9194b4-2021-Jul-15--17_36_15.csv")
+    // 读取csv文件
+    val df =  spark.read.format("csv").option("header","true").load("/Users/sodamnsure/Desktop/Result_1.csv")
 
-    df.saveToEs("es_test/docs", options)
+    df.printSchema()
+
+    df.saveToEs("user/_doc", options)
 
 
     spark.stop()
