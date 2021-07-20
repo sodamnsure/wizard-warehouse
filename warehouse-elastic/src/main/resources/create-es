@@ -1,0 +1,45 @@
+PUT /user
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "properties": {
+      "f_user_id": {
+        "type": "long"
+      },
+      "last_order": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+      },
+      "not_charge_days": {
+        "type": "long"
+      },
+      "recent_7days_orders": {
+        "type": "long"
+      },
+      "recent_15days_orders": {
+        "type": "long"
+      },
+      "recent_30days_orders": {
+        "type": "long"
+      },
+      "recent_60days_orders": {
+        "type": "long"
+      },
+      "recent_7days_per_power": {
+        "type": "double"
+      },
+      "recent_14days_per_power": {
+        "type": "double"
+      },
+      "recent_30days_per_power": {
+        "type": "double"
+      },
+      "per_unit_price": {
+        "type": "double"
+      }
+    }
+  }
+}
