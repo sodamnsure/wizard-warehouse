@@ -1,3 +1,5 @@
+package com.feelings.warehouse.external.elastic
+
 import org.apache.spark.sql.SparkSession
 import org.elasticsearch.spark.sql.sparkDatasetFunctions
 
@@ -13,16 +15,15 @@ object SparkWriteES {
     val options = Map(
       "es.index.auto.create" -> "true",
       "es.nodes.wan.only" -> "true",
-      "es.nodes" -> "elastic-9194b4.es.us-east-1.aws.found.io",
-      "es.port" -> "9243",
+      "es.nodes" -> "es-cn-7mz29rpta0004adfx.public.elasticsearch.aliyuncs.com",
+      "es.port" -> "9200",
       "es.net.http.auth.user" -> "elastic",
-      "es.net.http.auth.pass" -> "********************",
-      "es.net.ssl" -> "true",
+      "es.net.http.auth.pass" -> "*********",
       "es.mapping.id" -> "f_user_id"
     )
 
     // 读取csv文件
-    val df =  spark.read.format("csv").option("header","true").load("/Users/sodamnsure/Desktop/Result_1.csv")
+    val df = spark.read.format("csv").option("header", "true").load("/Users/sodamnsure/Desktop/Result_1.csv")
 
     df.printSchema()
 
