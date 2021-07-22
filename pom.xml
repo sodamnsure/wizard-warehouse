@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <version>1.0</version>
     <modules>
-        <module>warehouse-elastic</module>
+        <module>warehouse-external</module>
     </modules>
 
     <properties>
