@@ -1,4 +1,4 @@
-PUT /user
+PUT /fp_user_profile
 {
   "settings": {
     "number_of_shards": 1,
@@ -9,12 +9,26 @@ PUT /user
       "f_user_id": {
         "type": "long"
       },
+      "f_user_name":{
+        "type": "text"
+      },
+      "f_user_phone":{
+        "type": "long"
+      },
+      "f_gender":{
+        "type": "integer"
+      },
+      "f_create_date":{
+        "type": "integer"
+      },
       "last_order": {
-        "type": "date",
-        "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+        "type": "date"
       },
       "not_charge_days": {
         "type": "long"
+      },
+      "fre_charge_city": {
+        "type": "text"
       },
       "recent_7days_orders": {
         "type": "long"
@@ -39,6 +53,27 @@ PUT /user
       },
       "per_unit_price": {
         "type": "double"
+      },
+      "is_fee_member":{
+        "type": "long"
+      },
+      "fee_member_remaindays":{
+        "type": "long"
+      },
+      "pay_fee_member_counts":{
+        "type": "long"
+      },
+      "pay_discounts_total":{
+        "type": "long"
+      },
+      "pay_red_envelopes_total":{
+        "type": "long"
+      },
+      "pay_red_envelopes_cnts":{
+        "type": "long"
+      },
+      "pay_limit_seckill_cnts":{
+        "type": "long"
       }
     }
   }
