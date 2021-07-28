@@ -24,7 +24,7 @@ public class FlinkUtils {
     public static <T> DataStream<T> createKafkaStream(String[] args, Class<? extends DeserializationSchema<T>> deserializer) throws Exception {
         ParameterTool parameterTool = ParameterTool.fromPropertiesFile(args[0]);
 
-        long checkpointInterval = parameterTool.getLong("checkpoint.interval", 30000);
+        long checkpointInterval = parameterTool.getLong("checkpoint.interval", 60000);
         String checkpointPath = parameterTool.getRequired("checkpoint.path");
 
         // 开启Checkpoint, 每隔60000 ms进行启动一个检查点, 设置模式为exactly-once,
