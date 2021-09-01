@@ -1,4 +1,4 @@
-package com.feelings.warehouse.realtime.utils;
+package com.wizard.warehouse.realtime.utils;
 
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;

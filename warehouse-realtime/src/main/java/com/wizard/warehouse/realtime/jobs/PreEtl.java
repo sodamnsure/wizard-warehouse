@@ -1,6 +1,6 @@
-package com.feelings.warehouse.realtime.jobs;
+package com.wizard.warehouse.realtime.jobs;
 
-import com.feelings.warehouse.realtime.utils.FlinkUtils;
+import com.wizard.warehouse.realtime.utils.FlinkUtils;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 
