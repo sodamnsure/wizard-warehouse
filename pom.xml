@@ -31,6 +31,7 @@
         <lombok.version>1.18.12</lombok.version>
         <typesafe.version>1.4.0</typesafe.version>
         <drools.version>7.33.0.Final</drools.version>
+        <httpclient.version>4.5.13</httpclient.version>
     </properties>
 
     <repositories>
@@ -181,6 +182,12 @@
                 <groupId>com.typesafe</groupId>
                 <artifactId>config</artifactId>
                 <version>${typesafe.version}</version>
+            </dependency>
+            <!-- http包 -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
