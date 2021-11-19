@@ -1,14 +1,15 @@
 package com.wizard.warehouse.cdc.main;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.wizard.warehouse.cdc.functions.JsonFilterFunction;
 import com.wizard.warehouse.cdc.functions.JsonToBeanFunction;
 import com.wizard.warehouse.cdc.functions.KafkaSourceBuilder;
+import com.wizard.warehouse.cdc.operator.FilterOperator;
+import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-
-import java.util.Objects;
 
 /**
  * @Author: sodamnsure
@@ -33,9 +34,14 @@ public class Main {
         /*
           Json解析
          */
-        SingleOutputStreamOperator<JsonNode> filter = stream.map(new JsonToBeanFunction()).filter(Objects::nonNull);
+        SingleOutputStreamOperator<JsonNode> jsonStream = stream.map(new JsonToBeanFunction());
 
-        filter.print();
+        /*
+          过滤DDL与删除操作
+         */
+        SingleOutputStreamOperator<JsonNode> JsonFilter = jsonStream.filter(new JsonFilterFunction());
+
+        JsonFilter.print();
 
         env.execute();
     }
