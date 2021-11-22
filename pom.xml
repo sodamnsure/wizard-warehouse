@@ -27,7 +27,7 @@
         <clickhouse.version>1.6-stable</clickhouse.version>
         <slf4j.version>1.7.25</slf4j.version>
         <log4j.slf4j.version>2.11.1</log4j.slf4j.version>
-        <jackson.version>2.9.5</jackson.version>
+        <json.version>1.2.78</json.version>
         <lombok.version>1.18.12</lombok.version>
         <typesafe.version>1.4.0</typesafe.version>
         <canal.version>1.1.0</canal.version>
@@ -114,6 +114,11 @@
                 <artifactId>flink-connector-jdbc_${scala.version}</artifactId>
                 <version>${flink.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-table-api-java-bridge_${scala.version}</artifactId>
+                <version>${flink.version}</version>
+            </dependency>
             <!-- mysql驱动 -->
             <dependency>
                 <groupId>mysql</groupId>
@@ -178,11 +183,11 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
-            <!-- Jackson Json处理工具包 -->
+            <!-- Json处理工具包 -->
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${json.version}</version>
             </dependency>
             <!-- 配置文件解析工具 -->
             <dependency>
