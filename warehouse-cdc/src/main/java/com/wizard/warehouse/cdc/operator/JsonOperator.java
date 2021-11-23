@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class JsonOperator {
     public static boolean filterType(JSONObject jsonObject) throws Exception {
-        // 获取操作类型
+        // 获取操作类型：jackson解析嵌套Json出现问题，不再采用
         String type = jsonObject.getString("type");
         // 只留下插入和更新操作
         return type.equals("INSERT") || type.equals("UPDATE");
