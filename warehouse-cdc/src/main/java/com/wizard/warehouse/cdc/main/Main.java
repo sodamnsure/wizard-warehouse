@@ -5,9 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.wizard.warehouse.cdc.functions.JsonToBeanFunction;
 import com.wizard.warehouse.cdc.functions.KafkaSourceBuilder;
 import com.wizard.warehouse.cdc.operator.JsonOperator;
-import org.apache.doris.flink.cfg.DorisExecutionOptions;
 import org.apache.doris.flink.cfg.DorisOptions;
-import org.apache.doris.flink.cfg.DorisReadOptions;
 import org.apache.doris.flink.cfg.DorisSink;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.streaming.api.CheckpointingMode;
@@ -16,8 +14,6 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
-
-import java.util.Properties;
 
 /**
  * @Author: sodamnsure
@@ -49,34 +45,24 @@ public class Main {
          */
         SingleOutputStreamOperator<JSONObject> JsonFilter = jsonStream.filter((FilterFunction<JSONObject>) JsonOperator::filterType);
 
-        SingleOutputStreamOperator<JSONObject> data = JsonFilter.process(new ProcessFunction<JSONObject, JSONObject>() {
+        SingleOutputStreamOperator<String> data = JsonFilter.process(new ProcessFunction<JSONObject, String>() {
             @Override
-            public void processElement(JSONObject jsonObject, ProcessFunction<JSONObject, JSONObject>.Context context, Collector<JSONObject> collector) throws Exception {
+            public void processElement(JSONObject jsonObject, ProcessFunction<JSONObject, String>.Context context, Collector<String> collector) {
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 for (int i = 0; i < jsonArray.size(); i++) {
                     JSONObject object = jsonArray.getObject(i, JSONObject.class);
-                    collector.collect(object);
+                    collector.collect(object.toString());
                 }
             }
         });
 
-        Properties pro = new Properties();
-        pro.setProperty("format", "json");
-        pro.setProperty("strip_outer_array", "true");
-
         data.addSink(
                 DorisSink.sink(
-                        DorisReadOptions.builder().build(),
-                        DorisExecutionOptions.builder()
-                                .setBatchSize(3)
-                                .setBatchIntervalMs(0L)
-                                .setMaxRetries(3)
-                                .setStreamLoadProp(pro).build(),
                         DorisOptions.builder()
-                                .setFenodes("marketing:8030")
+                                .setFenodes("test:8030")
                                 .setTableIdentifier("example_db.user")
-                                .setUsername("doris")
-                                .setPassword("Pandeng8848").build()
+                                .setUsername("test")
+                                .setPassword("test").build()
                 )
         );
 
