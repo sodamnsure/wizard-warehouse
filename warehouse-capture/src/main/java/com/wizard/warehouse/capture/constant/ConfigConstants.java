@@ -1,4 +1,4 @@
-package com.wizard.warehouse.cdc.constant;
+package com.wizard.warehouse.capture.constant;
 
 /**
  * @Author: sodamnsure

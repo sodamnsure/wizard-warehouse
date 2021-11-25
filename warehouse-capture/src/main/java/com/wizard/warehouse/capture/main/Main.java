@@ -1,10 +1,10 @@
-package com.wizard.warehouse.cdc.main;
+package com.wizard.warehouse.capture.main;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.wizard.warehouse.cdc.functions.JsonToBeanFunction;
-import com.wizard.warehouse.cdc.functions.KafkaSourceBuilder;
-import com.wizard.warehouse.cdc.operator.JsonOperator;
+import com.wizard.warehouse.capture.functions.JsonToBeanFunction;
+import com.wizard.warehouse.capture.functions.KafkaSourceBuilder;
+import com.wizard.warehouse.capture.operator.JsonOperator;
 import org.apache.doris.flink.cfg.DorisOptions;
 import org.apache.doris.flink.cfg.DorisSink;
 import org.apache.flink.api.common.functions.FilterFunction;

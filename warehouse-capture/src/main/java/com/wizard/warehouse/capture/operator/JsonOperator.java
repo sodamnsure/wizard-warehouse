@@ -1,4 +1,4 @@
-package com.wizard.warehouse.cdc.operator;
+package com.wizard.warehouse.capture.operator;
 
 import com.alibaba.fastjson.JSONObject;
 

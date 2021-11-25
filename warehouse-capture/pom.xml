@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>warehouse-cdc</artifactId>
+    <artifactId>warehouse-capture</artifactId>
 
     <dependencies>
         <!-- flink 依赖包-->

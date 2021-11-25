@@ -10,7 +10,7 @@
     <version>1.0</version>
     <modules>
         <module>warehouse-realtime</module>
-        <module>warehouse-cdc</module>
+        <module>warehouse-capture</module>
     </modules>
 
     <properties>

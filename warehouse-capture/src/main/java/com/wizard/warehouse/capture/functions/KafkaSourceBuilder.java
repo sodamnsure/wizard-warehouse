@@ -1,8 +1,8 @@
-package com.wizard.warehouse.cdc.functions;
+package com.wizard.warehouse.capture.functions;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import com.wizard.warehouse.cdc.constant.ConfigConstants;
+import com.wizard.warehouse.capture.constant.ConfigConstants;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 

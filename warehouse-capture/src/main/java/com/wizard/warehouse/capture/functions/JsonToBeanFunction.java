@@ -1,4 +1,4 @@
-package com.wizard.warehouse.cdc.functions;
+package com.wizard.warehouse.capture.functions;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
