@@ -4,12 +4,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.wizard.warehouse.capture.functions.JsonToBeanFunction;
 import com.wizard.warehouse.capture.functions.KafkaSourceBuilder;
 import com.wizard.warehouse.capture.functions.ProcessDataFunction;
+import org.apache.doris.flink.cfg.DorisExecutionOptions;
 import org.apache.doris.flink.cfg.DorisOptions;
+import org.apache.doris.flink.cfg.DorisReadOptions;
 import org.apache.doris.flink.cfg.DorisSink;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+
+import java.util.Properties;
 
 /**
  * @Author: sodamnsure
@@ -43,11 +47,22 @@ public class Main {
 
         resultStream.print();
 
+        Properties pro = new Properties();
+        pro.setProperty("format", "json");
+        pro.setProperty("strip_outer_array", "true");
+        pro.setProperty("function_column.sequence_col", "update_time");
+
         resultStream.addSink(
                 DorisSink.sink(
+                        DorisReadOptions.builder().build(),
+                        DorisExecutionOptions.builder()
+                                .setBatchSize(3)
+                                .setBatchIntervalMs(0L)
+                                .setMaxRetries(3)
+                                .setStreamLoadProp(pro).build(),
                         DorisOptions.builder()
                                 .setFenodes("test:8030")
-                                .setTableIdentifier("example_db.user")
+                                .setTableIdentifier("example_db.user_log_1")
                                 .setUsername("test")
                                 .setPassword("test").build()
                 )
