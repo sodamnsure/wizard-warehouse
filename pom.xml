@@ -21,6 +21,7 @@
         <hbase.version>2.0.6</hbase.version>
         <flink.version>1.13.3</flink.version>
         <flink.cdc.version>2.1.0</flink.cdc.version>
+        <doris.flink.version>1.0.0</doris.flink.version>
         <scala.version>2.12</scala.version>
         <mysql.version>8.0.20</mysql.version>
         <redis.version>3.6.1</redis.version>
@@ -141,6 +142,12 @@
                 <groupId>com.ververica</groupId>
                 <artifactId>flink-connector-mysql-cdc</artifactId>
                 <version>${flink.cdc.version}</version>
+            </dependency>
+            <!-- flink doris connector -->
+            <dependency>
+                <groupId>org.apache</groupId>
+                <artifactId>doris-flink</artifactId>
+                <version>${doris.flink.version}</version>
             </dependency>
             <!-- canal java客户端-->
             <dependency>

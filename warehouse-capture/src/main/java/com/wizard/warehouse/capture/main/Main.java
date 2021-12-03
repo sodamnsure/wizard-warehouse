@@ -41,7 +41,7 @@ public class Main {
         SingleOutputStreamOperator<JSONObject> jsonStream = dataStream.map(new JsonToBeanFunction());
 
         /*
-          处理"Change Data Capture"函数
+          处理"Change Data Capture"
          */
         SingleOutputStreamOperator<String> resultStream = jsonStream.process(new ProcessDataFunction());
 
