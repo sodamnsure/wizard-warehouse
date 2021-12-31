@@ -1,8 +1,9 @@
 package com.wizard.warehouse.capture.functions;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.flink.streaming.api.functions.ProcessFunction;
+import com.wizard.warehouse.capture.beans.LoadTableConfig;
+import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
 
 /**
@@ -10,17 +11,20 @@ import org.apache.flink.util.Collector;
  * @Date: 2021/11/29 10:11 上午
  * @Desc: 处理"Change Data Capture"函数
  */
-public class ProcessDataFunction extends ProcessFunction<JSONObject, String> {
+public class ProcessDataFunction extends BroadcastProcessFunction<JSONObject, String, JSONObject> {
+
     @Override
-    public void processElement(JSONObject jsonObject, ProcessFunction<JSONObject, String>.Context context, Collector<String> collector) throws Exception {
-        // 过滤无效数据
-        String type = jsonObject.getString("type");
-        if (type.equals("INSERT") || type.equals("UPDATE")) {
-            JSONArray jsonArray = jsonObject.getJSONArray("data");
-            for (int i = 0; i < jsonArray.size(); i++) {
-                JSONObject object = jsonArray.getObject(i, JSONObject.class);
-                collector.collect(object.toString());
-            }
-        }
+    public void processElement(JSONObject jsonObject, BroadcastProcessFunction<JSONObject, String, JSONObject>.ReadOnlyContext readOnlyContext, Collector<JSONObject> collector) throws Exception {
+
+    }
+
+    @Override
+    public void processBroadcastElement(String s, BroadcastProcessFunction<JSONObject, String, JSONObject>.Context context, Collector<JSONObject> collector) throws Exception {
+        // 获取并解析数据
+        JSONObject jsonObject = JSON.parseObject(s);
+        String data = jsonObject.getString("after");
+        LoadTableConfig loadTableConfig = JSON.parseObject(data, LoadTableConfig.class);
+
+        System.out.println(loadTableConfig);
     }
 }

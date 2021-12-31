@@ -29,6 +29,11 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-api-java-bridge_2.12</artifactId>
         </dependency>
+        <!-- flink cdc-->
+        <dependency>
+            <groupId>com.ververica</groupId>
+            <artifactId>flink-connector-mysql-cdc</artifactId>
+        </dependency>
         <!-- flink doris connector -->
         <dependency>
             <groupId>org.apache</groupId>
@@ -38,6 +43,11 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
+        </dependency>
+        <!-- 类构造工具包 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
         <!-- 配置文件解析工具 -->
         <dependency>
