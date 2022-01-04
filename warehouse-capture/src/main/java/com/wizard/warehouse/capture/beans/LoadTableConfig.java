@@ -7,12 +7,17 @@ import lombok.NoArgsConstructor;
 /**
  * @Author: sodamnsure
  * @Date: 2021/12/29 5:03 PM
- * @Desc: 导入配置表
+ * @Desc: 封装配置表对象
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoadTableConfig {
+    /**
+     * 动态分流
+     */
+    public static final String SINK_TYPE_DORIS = "doris";
+
     /**
      * 表主键
      */

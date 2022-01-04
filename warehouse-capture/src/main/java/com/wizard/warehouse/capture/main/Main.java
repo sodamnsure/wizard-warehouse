@@ -53,8 +53,6 @@ public class Main {
         DataStreamSource<String> tableConfDStream = env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "MySQL Source");
         BroadcastStream<String> broadcastStream = tableConfDStream.broadcast(StateDescContainer.getConfigState());
 
-        tableConfDStream.print();
-
         /*
           链接主流与广播流
          */
