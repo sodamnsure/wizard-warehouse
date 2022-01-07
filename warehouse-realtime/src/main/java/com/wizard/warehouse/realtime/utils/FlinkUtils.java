@@ -1,6 +1,7 @@
 package com.wizard.warehouse.realtime.utils;
 
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
@@ -19,8 +20,11 @@ public class FlinkUtils {
         String checkpointStorage = parameterTool.getRequired("checkpoint.storage");
         // enabling and configuring checkpointing
         env.enableCheckpointing(checkpointInterval);
+        env.setStateBackend(new EmbeddedRocksDBStateBackend(true));
         env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
         env.getCheckpointConfig().setCheckpointStorage(checkpointStorage);
+
+
 
     }
 }
