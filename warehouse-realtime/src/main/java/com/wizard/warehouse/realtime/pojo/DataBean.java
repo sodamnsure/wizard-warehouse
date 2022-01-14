@@ -3,12 +3,11 @@ package com.wizard.warehouse.realtime.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.flink.table.annotation.DataTypeHint;
 
 import java.util.HashMap;
 
 /**
- *
+ * the object represents a element of the stream
  */
 @Data
 @NoArgsConstructor
