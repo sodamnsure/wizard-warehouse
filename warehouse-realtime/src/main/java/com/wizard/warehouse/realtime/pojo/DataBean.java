@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.HashMap;
 
 /**
- * the object represents a element of the stream
+ * the object represents an element of the stream
  */
 @Data
 @NoArgsConstructor
