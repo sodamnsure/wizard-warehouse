@@ -12,6 +12,7 @@
         <module>warehouse-realtime</module>
         <module>warehouse-capture</module>
         <module>warehouse-elasticsearch</module>
+        <module>wizard-tools</module>
     </modules>
 
     <properties>
