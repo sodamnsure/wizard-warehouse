@@ -14,7 +14,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- *
+ * In a Hadoop based data warehouse, we usually use Flume to import event logs from Kafka into HDFS
+ * and create Hive external tables partitioned by time. One of the keys of this process is to extract
+ * the event time from the logs. Flume has a mechanism called Interceptor, It’s possible to write own
+ * interceptor, thus do the extraction and conversion in one step.
  */
 public class EventsInterceptor implements Interceptor {
     private static final FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy-MM-dd");
