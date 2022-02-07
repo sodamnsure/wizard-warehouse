@@ -13,7 +13,7 @@ import java.util.HashMap;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DataBean {
-    private Integer id;
+    private String id;
 
     private String deviceId;
 

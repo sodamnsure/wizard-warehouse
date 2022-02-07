@@ -13,6 +13,7 @@
 
     <properties>
         <scala.version>2.12</scala.version>
+        <clickhouse.version>0.2.4</clickhouse.version>
     </properties>
 
     <dependencies>
@@ -49,6 +50,17 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- java client and jdbc driver for clickhouse-->
+        <dependency>
+            <groupId>ru.yandex.clickhouse</groupId>
+            <artifactId>clickhouse-jdbc</artifactId>
+            <version>${clickhouse.version}</version>
+        </dependency>
+        <!--  a lightweight Java library used to effectively convert JSON strings to Java objects and vice versa -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
         </dependency>
     </dependencies>
 
