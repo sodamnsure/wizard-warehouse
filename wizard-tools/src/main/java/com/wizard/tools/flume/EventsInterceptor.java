@@ -22,48 +22,74 @@ import java.util.stream.Collectors;
 public class EventsInterceptor implements Interceptor {
     private static final FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy-MM-dd");
 
+    /**
+     * Any initialization / startup needed by the Interceptor.
+     */
     @Override
     public void initialize() {
-
     }
 
+    /**
+     * Interception of a single Event.
+     *
+     * @param event Event to be intercepted
+     * @return Modified event that headers contains formatting time
+     */
     @Override
     public Event intercept(Event event) {
+        // returns a map of name-value pairs describing the data stored in the body.
         Map<String, String> headers = event.getHeaders();
-
+        // constructs a new String by decoding the raw byte array of the data contained in this event using the specified charset.
         String eventBody = new String(event.getBody(), StandardCharsets.UTF_8);
-
         try {
+            // if the given string is null, the Event is to be dropped
             if (Strings.isNullOrEmpty(eventBody)) {
                 return null;
             }
-
+            // deserializes json into JSONObject and get time
             Long time = JSON.parseObject(eventBody).getLong("time");
+            // formats an object to produce a string: yyyy-MM-dd
             String eventDate = dateFormat.format(time);
+            // associates the specified value(yyyy-MM-dd) with the specified key(eventDate) in this map
             headers.put("eventDate", eventDate);
+            // set the event headers
             event.setHeaders(headers);
         } catch (Exception e) {
+            // if parsing fails, associates the specified value(unknow) with the specified key(eventDate) in this map
             headers.put("eventDate", "unknow");
+            // // set the event headers
             event.setHeaders(headers);
         }
 
         return event;
     }
 
+    /**
+     * Interception of a batch of events.
+     *
+     * @param list Input list of events
+     * @return Output list of events.
+     */
     @Override
     public List<Event> intercept(List<Event> list) {
-        return list.stream().map(this::intercept)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        return list.stream()
+                // returns a stream consisting of the results of applying the intercept function to the elements of this stream.
+                .map(this::intercept)
+                // returns a stream consisting of the elements of this stream that match the given predicate.
+                .filter(Objects::nonNull).collect(Collectors.toList());
     }
 
+    /**
+     * Perform any closing / shutdown needed by the Interceptor.
+     */
     @Override
     public void close() {
-
     }
 
+    /**
+     * Builder implementations MUST have a no-arg constructor
+     */
     public static class TimeBuilder implements Interceptor.Builder {
-
         @Override
         public Interceptor build() {
             return new EventsInterceptor();
@@ -71,9 +97,6 @@ public class EventsInterceptor implements Interceptor {
 
         @Override
         public void configure(Context context) {
-
         }
     }
-
-
 }
