@@ -21,13 +21,18 @@ public class FlinkUtils {
     // obtain an final execution environment
     public static final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
+    // reading and parsing program arguments from different sources
+    public static ParameterTool parameterTool;
+
     /**
-     * @param parameterTool reading and parsing program arguments from different sources
-     * @param deserializer  defines how to deserialize binaries of Kafka message value
-     * @param <T>           type of the returned stream
+     * @param args         the param that contains the configuration file path
+     * @param deserializer defines how to deserialize binaries of Kafka message value
+     * @param <T>          type of the returned stream
      * @return the data stream constructed from kafka
      */
-    public static <T> DataStream<T> createKafkaStream(ParameterTool parameterTool, Class<? extends DeserializationSchema<T>> deserializer) throws Exception {
+    public static <T> DataStream<T> createKafkaStream(String[] args, Class<? extends DeserializationSchema<T>> deserializer) throws Exception {
+        parameterTool = ParameterTool.fromPropertiesFile(args[0]);
+
         // get the String value for the given key.
         long checkpointInterval = parameterTool.getLong("checkpoint.interval", 30000L);
         String checkpointStorage = parameterTool.getRequired("checkpoint.storage");
@@ -55,12 +60,14 @@ public class FlinkUtils {
     }
 
     /**
-     * @param parameterTool reading and parsing program arguments from different sources
-     * @param deserializer  defines how to deserialize binaries of Kafka message value or metadata such as topic、partition、offset
-     * @param <T>           type of the returned stream
+     * @param args         args the param that contains the configuration file path
+     * @param deserializer defines how to deserialize binaries of Kafka message value or metadata such as topic、partition、offset
+     * @param <T>          type of the returned stream
      * @return the data stream constructed from kafka
      */
-    public static <T> DataStream<T> createKafkaStreamWithUniq(ParameterTool parameterTool, Class<? extends KafkaDeserializationSchema<T>> deserializer) throws Exception {
+    public static <T> DataStream<T> createKafkaStreamWithUniq(String[] args, Class<? extends KafkaDeserializationSchema<T>> deserializer) throws Exception {
+        parameterTool = ParameterTool.fromPropertiesFile(args[0]);
+
         // get the String value for the given key.
         long checkpointInterval = parameterTool.getLong("checkpoint.interval", 30000L);
         String checkpointStorage = parameterTool.getRequired("checkpoint.storage");
