@@ -51,6 +51,10 @@ public class DataBean {
 
     private Long timestamp;
 
+    private String date;
+
+    private String hour;
+
     private String newSessionId;
 
     private String country;
@@ -66,4 +70,6 @@ public class DataBean {
     private Long lastUpdate;
 
     private int isNew;
+
+    private int isN;
 }

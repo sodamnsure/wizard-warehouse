@@ -19,8 +19,11 @@ public class JsonToBeanFuncWithUniq extends ProcessFunction<Tuple2<String, Strin
         try {
             // unique id : topic-partition-offset;
             String id = tp.f0;
+            // deserializes json into DataBean
             DataBean dataBean = JSON.parseObject(tp.f1, DataBean.class);
+            // set up id
             dataBean.setId(id);
+            // emits a record.
             out.collect(dataBean);
         } catch (Exception e) {
             // e.printStackTrace();
