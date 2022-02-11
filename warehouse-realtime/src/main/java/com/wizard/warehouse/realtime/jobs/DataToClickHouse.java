@@ -17,7 +17,7 @@ import java.util.Date;
 
 
 /**
- * add data to clickhouse
+ * Add data to clickhouse
  */
 public class DataToClickHouse {
     public static void main(String[] args) throws Exception {
