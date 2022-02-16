@@ -2,7 +2,7 @@ package com.wizard.warehouse.realtime.jobs;
 
 import com.wizard.warehouse.realtime.kafka.UniqDeserializer;
 import com.wizard.warehouse.realtime.pojo.DataBean;
-import com.wizard.warehouse.realtime.udf.JsonToBeanFuncWithUniq;
+import com.wizard.warehouse.realtime.udf.JsonToUniqBeanFunc;
 import com.wizard.warehouse.realtime.utils.FlinkUtils;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -24,7 +24,7 @@ public class DataToClickHouse {
 
         DataStream<Tuple2<String, String>> kafkaStreamWithUniq = FlinkUtils.createKafkaStreamWithUniq(args, UniqDeserializer.class);
         // parse data
-        SingleOutputStreamOperator<DataBean> beanStream = kafkaStreamWithUniq.process(new JsonToBeanFuncWithUniq());
+        SingleOutputStreamOperator<DataBean> beanStream = kafkaStreamWithUniq.process(new JsonToUniqBeanFunc());
 
         beanStream.map(new MapFunction<DataBean, DataBean>() {
 

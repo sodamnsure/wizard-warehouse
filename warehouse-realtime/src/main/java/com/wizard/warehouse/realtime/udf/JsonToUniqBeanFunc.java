@@ -9,7 +9,7 @@ import org.apache.flink.util.Collector;
 /**
  * Parse JSON Strings into Java Objects
  */
-public class JsonToBeanFuncWithUniq extends ProcessFunction<Tuple2<String, String>, DataBean> {
+public class JsonToUniqBeanFunc extends ProcessFunction<Tuple2<String, String>, DataBean> {
 
     /**
      * Parse json into DataBean
