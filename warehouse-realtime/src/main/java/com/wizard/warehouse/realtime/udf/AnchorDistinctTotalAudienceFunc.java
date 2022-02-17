@@ -20,26 +20,29 @@ import org.apache.flink.util.Collector;
 public class AnchorDistinctTotalAudienceFunc extends KeyedProcessFunction<String, DataBean, Tuple3<String, Integer, Integer>> {
     private transient ValueState<Integer> uvState;
     private transient ValueState<Integer> pvState;
+    private transient ValueState<Integer> onlineState;
     private transient ValueState<BloomFilter<String>> bloomFilterState;
 
 
     @Override
     public void open(Configuration parameters) throws Exception {
         // configuration of state TTL logic.
-        StateTtlConfig stateTtlConfig = StateTtlConfig
-                .newBuilder(Time.hours(6))
+        StateTtlConfig stateTtlConfig = StateTtlConfig.newBuilder(Time.hours(6))
                 // last access timestamp is initialised when state is created and updated on every write operation.
                 .setUpdateType(StateTtlConfig.UpdateType.OnCreateAndWrite)
                 // Never return expired user value.
-                .neverReturnExpired()
-                .build();
+                .neverReturnExpired().build();
 
-        // creates a new ValueStateDescriptor to count the cumulative number of viewers of each anchor
+        // creates a new ValueStateDescriptor to count uv of each anchor
         ValueStateDescriptor<Integer> uvStateDescriptor = new ValueStateDescriptor<>("uv-state", Integer.class);
         uvStateDescriptor.enableTimeToLive(stateTtlConfig);
-        // creates a new ValueStateDescriptor to count the real-time online number of each anchor
+        // creates a new ValueStateDescriptor to count pv of each anchor
         ValueStateDescriptor<Integer> pvStateDescriptor = new ValueStateDescriptor<>("pv-state", Integer.class);
         pvStateDescriptor.enableTimeToLive(stateTtlConfig);
+        // creates a new ValueStateDescriptor to count the real-time online number of each anchor
+        ValueStateDescriptor<Integer> onlineStateDescriptor = new ValueStateDescriptor<>("online-state", Integer.class);
+        onlineStateDescriptor.enableTimeToLive(stateTtlConfig);
+
         //
         ValueStateDescriptor<BloomFilter<String>> bloomFilterStateDescriptor = new ValueStateDescriptor<>("bloom-filter-state", TypeInformation.of(new TypeHint<BloomFilter<String>>() {
         }));
@@ -48,18 +51,40 @@ public class AnchorDistinctTotalAudienceFunc extends KeyedProcessFunction<String
         uvState = getRuntimeContext().getState(uvStateDescriptor);
         pvState = getRuntimeContext().getState(pvStateDescriptor);
         bloomFilterState = getRuntimeContext().getState(bloomFilterStateDescriptor);
-
+        onlineState = getRuntimeContext().getState(onlineStateDescriptor);
 
     }
 
     @Override
     public void processElement(DataBean bean, KeyedProcessFunction<String, DataBean, Tuple3<String, Integer, Integer>>.Context ctx, Collector<Tuple3<String, Integer, Integer>> out) throws Exception {
-        String deviceId = bean.getDeviceId();
-        BloomFilter<String> bloomFilter = bloomFilterState.value();
+        String eventId = bean.getEventId();
+        if ("liveEnter".equals(eventId)) {
+            String deviceId = bean.getDeviceId();
+            Integer uv = uvState.value();
+            Integer pv = pvState.value();
+            Integer onlineCounts = onlineState.value();
+            BloomFilter<String> bloomFilter = bloomFilterState.value();
 
-        if (bloomFilterState == null) {
-            bloomFilter = BloomFilter.create(Funnels.unencodedCharsFunnel(), 1000000);
+            if (bloomFilterState == null) {
+                bloomFilter = BloomFilter.create(Funnels.unencodedCharsFunnel(), 1000000);
+                pv = 0;
+                uv = 0;
+            }
+
+            if (!bloomFilter.mightContain(deviceId)) {
+                bloomFilter.put(deviceId);
+                uv++;
+                bloomFilterState.update(bloomFilter);
+                uvState.update(uv);
+            }
+            pv++;
+            pvState.update(pv);
+
+            out.collect(Tuple3.of(ctx.getCurrentKey(), uv, pv));
+        } else {
+
         }
+
 
     }
 }
