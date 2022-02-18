@@ -6,7 +6,7 @@ import com.wizard.warehouse.realtime.udf.JsonToBeanFunc;
 import com.wizard.warehouse.realtime.utils.FlinkUtils;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
-import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -38,10 +38,9 @@ public class LiveAudienceCount {
 
         // count the cumulative number of viewers of each anchor
         // count the real-time online number of each anchor
-        SingleOutputStreamOperator<Tuple3<String, Integer, Integer>> distinctWithAnchor = keyByAnchorStream.process(new AnchorDistinctTotalAudienceFunc());
+        SingleOutputStreamOperator<Tuple4<String, Integer, Integer, Integer>> res = keyByAnchorStream.process(new AnchorDistinctTotalAudienceFunc());
 
-
-
+        res.print();
 
         FlinkUtils.env.execute();
 

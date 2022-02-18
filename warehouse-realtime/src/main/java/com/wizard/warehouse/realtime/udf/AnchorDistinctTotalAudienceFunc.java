@@ -8,16 +8,18 @@ import org.apache.flink.api.common.time.Time;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.shaded.guava18.com.google.common.hash.BloomFilter;
 import org.apache.flink.shaded.guava18.com.google.common.hash.Funnels;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
+import scala.Int;
 
 /**
  * Real-time statistics of the number of viewers and times of anchors in each live broadcast room
  */
-public class AnchorDistinctTotalAudienceFunc extends KeyedProcessFunction<String, DataBean, Tuple3<String, Integer, Integer>> {
+public class AnchorDistinctTotalAudienceFunc extends KeyedProcessFunction<String, DataBean, Tuple4<String, Integer, Integer, Integer>> {
     private transient ValueState<Integer> uvState;
     private transient ValueState<Integer> pvState;
     private transient ValueState<Integer> onlineState;
@@ -55,36 +57,43 @@ public class AnchorDistinctTotalAudienceFunc extends KeyedProcessFunction<String
 
     }
 
-    @Override
-    public void processElement(DataBean bean, KeyedProcessFunction<String, DataBean, Tuple3<String, Integer, Integer>>.Context ctx, Collector<Tuple3<String, Integer, Integer>> out) throws Exception {
-        String eventId = bean.getEventId();
-        if ("liveEnter".equals(eventId)) {
-            String deviceId = bean.getDeviceId();
-            Integer uv = uvState.value();
-            Integer pv = pvState.value();
-            Integer onlineCounts = onlineState.value();
-            BloomFilter<String> bloomFilter = bloomFilterState.value();
 
+    @Override
+    public void processElement(DataBean bean, Context ctx, Collector<Tuple4<String, Integer, Integer, Integer>> out) throws Exception {
+        String eventId = bean.getEventId();
+
+        String deviceId = bean.getDeviceId();
+        Integer uv = uvState.value();
+        Integer pv = pvState.value();
+        Integer onlineCounts = onlineState.value();
+        BloomFilter<String> bloomFilter = bloomFilterState.value();
+
+        if (onlineCounts == null) {
+            onlineCounts = 0;
+        }
+        if ("liveEnter".equals(eventId)) {
             if (bloomFilterState == null) {
-                bloomFilter = BloomFilter.create(Funnels.unencodedCharsFunnel(), 1000000);
-                pv = 0;
                 uv = 0;
+                pv = 0;
+                onlineCounts = 0;
+                bloomFilter = BloomFilter.create(Funnels.unencodedCharsFunnel(), 1000000);
             }
 
             if (!bloomFilter.mightContain(deviceId)) {
-                bloomFilter.put(deviceId);
                 uv++;
-                bloomFilterState.update(bloomFilter);
                 uvState.update(uv);
+                bloomFilter.put(deviceId);
+                bloomFilterState.update(bloomFilter);
             }
             pv++;
             pvState.update(pv);
-
-            out.collect(Tuple3.of(ctx.getCurrentKey(), uv, pv));
+            onlineCounts++;
+            onlineState.update(onlineCounts);
         } else {
-
+            onlineCounts--;
+            onlineState.update(onlineCounts);
         }
 
-
+        out.collect(Tuple4.of(ctx.getCurrentKey(), uv, pv, onlineCounts));
     }
 }
