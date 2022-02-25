@@ -1,6 +1,7 @@
 package com.wizard.tools.flume;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.flume.Context;
@@ -19,8 +20,15 @@ import java.util.stream.Collectors;
  * the event time from the logs. Flume has a mechanism called Interceptor, It’s possible to write own
  * interceptor, thus do the extraction and conversion in one step.
  */
-public class EventsInterceptor implements Interceptor {
+public class EventsEncryptInterceptor implements Interceptor {
     private static final FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy-MM-dd");
+    String encryptFields;
+    String tsField;
+
+    EventsEncryptInterceptor(String encryptFields, String tsField) {
+        this.encryptFields = encryptFields;
+        this.tsField = tsField;
+    }
 
     /**
      * Any initialization / startup needed by the Interceptor.
@@ -46,12 +54,20 @@ public class EventsInterceptor implements Interceptor {
             if (Strings.isNullOrEmpty(eventBody)) {
                 return null;
             }
+            JSONObject jsonObject = JSON.parseObject(eventBody);
             // deserializes json into JSONObject and get time
-            Long time = JSON.parseObject(eventBody).getLong("time");
+            Long time = jsonObject.getLong(tsField);
             // formats an object to produce a string: yyyy-MM-dd
             String eventDate = dateFormat.format(time);
             // associates the specified value(yyyy-MM-dd) with the specified key(eventDate) in this map
             headers.put("eventDate", eventDate);
+            // get encrypted fields
+            String[] toEncryptFields = encryptFields.split(",");
+            // encrypt fields
+            for (String field : toEncryptFields) {
+                String value = jsonObject.getString(field);
+
+            }
             // set the event headers
             event.setHeaders(headers);
         } catch (Exception e) {
@@ -90,13 +106,18 @@ public class EventsInterceptor implements Interceptor {
      * Builder implementations MUST have a no-arg constructor
      */
     public static class TimeBuilder implements Interceptor.Builder {
+        String encryptFields;
+        String tsField;
+
         @Override
         public Interceptor build() {
-            return new EventsInterceptor();
+            return new EventsEncryptInterceptor(encryptFields, tsField);
         }
 
         @Override
         public void configure(Context context) {
+            encryptFields = context.getString("encrypt_fields");
+            tsField = context.getString("ts_field");
         }
     }
 }
