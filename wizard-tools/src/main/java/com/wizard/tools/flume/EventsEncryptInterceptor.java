@@ -3,6 +3,8 @@ package com.wizard.tools.flume;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
+import org.apache.commons.codec.digest.Md5Crypt;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -66,10 +68,17 @@ public class EventsEncryptInterceptor implements Interceptor {
             // encrypt fields
             for (String field : toEncryptFields) {
                 String value = jsonObject.getString(field);
-
+                // important！！Check whether it is empty or an empty string
+                if (StringUtils.isNotBlank(value)) {
+                    String crypt = Md5Crypt.md5Crypt(value.getBytes(StandardCharsets.UTF_8));
+                    // put it back
+                    jsonObject.put(field, crypt);
+                }
             }
-            // set the event headers
+            // set event headers
             event.setHeaders(headers);
+            // sets the raw byte array of the data contained in this event.
+            event.setBody(jsonObject.toJSONString().getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             // if parsing fails, associates the specified value(unknow) with the specified key(eventDate) in this map
             headers.put("eventDate", "unknow");
