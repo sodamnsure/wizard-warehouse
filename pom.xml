@@ -11,7 +11,7 @@
     <modules>
         <module>warehouse-realtime</module>
         <module>warehouse-capture</module>
-        <module>wizard-tools</module>
+        <module>warehouse-tools</module>
     </modules>
 
     <properties>

@@ -1,4 +1,4 @@
-package com.wizard.tools.flume;
+package com.wizard.warehouse.tools.flume;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
