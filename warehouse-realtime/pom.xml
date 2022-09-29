@@ -13,7 +13,6 @@
 
     <properties>
         <scala.version>2.12</scala.version>
-        <clickhouse.version>0.2.4</clickhouse.version>
     </properties>
 
     <dependencies>

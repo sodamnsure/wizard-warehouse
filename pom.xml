@@ -27,7 +27,7 @@
         <scala.version>2.12</scala.version>
         <mysql.version>8.0.20</mysql.version>
         <redis.version>3.6.1</redis.version>
-        <clickhouse.version>1.6-stable</clickhouse.version>
+        <clickhouse.version>0.3.2</clickhouse.version>
         <slf4j.version>1.7.25</slf4j.version>
         <log4j.slf4j.version>2.17.0</log4j.slf4j.version>
         <json.version>1.2.78</json.version>
@@ -135,8 +135,8 @@
             </dependency>
             <!-- clickhouse驱动 -->
             <dependency>
-                <groupId>com.github.housepower</groupId>
-                <artifactId>clickhouse-native-jdbc</artifactId>
+                <groupId>ru.yandex.clickhouse</groupId>
+                <artifactId>clickhouse-jdbc</artifactId>
                 <version>${clickhouse.version}</version>
             </dependency>
             <dependency>
