@@ -12,6 +12,7 @@
         <module>warehouse-realtime</module>
         <module>warehouse-capture</module>
         <module>warehouse-tools</module>
+        <module>warehouse-lineage</module>
     </modules>
 
     <properties>
