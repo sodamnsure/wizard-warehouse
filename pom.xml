@@ -13,6 +13,7 @@
         <module>warehouse-capture</module>
         <module>warehouse-tools</module>
         <module>warehouse-lineage</module>
+        <module>warehouse-doris</module>
     </modules>
 
     <properties>
