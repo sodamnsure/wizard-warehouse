@@ -75,11 +75,11 @@ public class SparkSubmitServiceImpl implements ISparkSubmitService {
         //通过Spark原生的监测api获取执行结果信息，需要在spark-default.xml、spark-env.sh、yarn-site.xml进行相应的配置
         String restUrl;
         try {
-            restUrl = "http://" + driverName + ":18080/api/v1/applications/" + handle.getAppId();
+            restUrl = "http://" + driverName + ":18088/api/v1/applications/" + handle.getAppId();
             log.info("访问application运算结果，url:{}", restUrl);
             return HttpUtil.httpGet(restUrl, null);
         } catch (Exception e) {
-            log.info("18080端口异常，请确保spark-history-server服务已开启");
+            log.info("18088端口异常，请确保spark-history-server服务已开启");
             return "{\"state\":\"error\",\"data\":\"history server is not start\"}";
         }
     }
